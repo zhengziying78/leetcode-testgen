@@ -15,6 +15,8 @@
     <h2>2. The Challenge</h2>
     <p>Testing cycle detection implementations is difficult because common approaches lead to circular reasoning. For example, comparing the output of one HasCycle() implementation against another requires trusting that the reference implementation is correct—but that's exactly what we're trying to verify.</p>
     
+    <p>This challenge is known as the <strong>Oracle Problem</strong> in software testing—a well-established research area spanning several decades. Academic research has developed approaches like <a href="https://en.wikipedia.org/wiki/Metamorphic_testing" target="_blank">metamorphic testing</a> to establish correctness through mathematical properties rather than reference implementations [1, 2].</p>
+    
     <h2>3. Algorithm</h2>
     
     <h3>3.1 Key Insight</h3>
@@ -116,8 +118,16 @@
     <h2>7. Conclusion</h2>
     <p>We have presented a systematic approach for generating random test cases for cycle detection algorithms in directed graphs. The method addresses the fundamental challenge of establishing ground truth without circular reasoning, providing a robust foundation for testing cycle detection implementations across diverse graph topologies.</p>
     
+    <h2>References</h2>
+    <ol>
+        <li>Barr, E. T., Harman, M., McMinn, P., Shahbaz, M., & Yoo, S. (2015). <a href="https://ieeexplore.ieee.org/document/6963470" target="_blank">The Oracle Problem in Software Testing: A Survey</a>. <em>IEEE Transactions on Software Engineering</em>, 41(5), 507-525.</li>
+        <li>Chen, T. Y., Cheung, S. C., & Yiu, S. M. (1998). <a href="https://arxiv.org/abs/2002.12543" target="_blank">Metamorphic Testing: A New Approach for Generating Next Test Cases</a>. <em>Technical Report HKUST-CS98-01</em>, Department of Computer Science, Hong Kong University of Science and Technology.</li>
+        <li>Chen, T. Y., Kuo, F. C., Liu, H., Poon, P. L., Towey, D., Tse, T. H., & Zhou, Z. Q. (2018). <a href="https://dl.acm.org/doi/10.1145/3143561" target="_blank">Metamorphic Testing: A Review of Challenges and Opportunities</a>. <em>ACM Computing Surveys</em>, 51(1), 1-27.</li>
+        <li>Segura, S., Fraser, G., Sanchez, A. B., & Ruiz-Cortés, A. (2016). <a href="https://eprints.whiterose.ac.uk/id/eprint/110335/" target="_blank">A Survey on Metamorphic Testing</a>. <em>IEEE Transactions on Software Engineering</em>, 42(9), 805-824.</li>
+    </ol>
+    
     <div class="footer">
-        <p><em>Note: This page was rewritten by Claude Code based on the original blog post at <a href="https://zhengziying.com/2015/03/02/how-to-randomly-generate-test-cases-for-a-hascycle-method/" target="_blank">zhengziying.com</a>.</em></p>
+        <p><em>Note: This page was rewritten by Claude Code based on the original blog post (March 2015) at <a href="https://zhengziying.com/2015/03/02/how-to-randomly-generate-test-cases-for-a-hascycle-method/" target="_blank">zhengziying.com</a>.</em></p>
     </div>
 </body>
 </html>
