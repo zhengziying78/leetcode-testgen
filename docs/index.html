@@ -9,77 +9,40 @@
 <body>
     <h1>LeetCode Test Case Generator</h1>
     
-    <blockquote>
-        "For many times, I found that testing a solution could be equally hard as writing a solution, if not harder."
-    </blockquote>
+    <h2>Overview</h2>
+    <p>This project demonstrates that <strong>testing a solution can be as challenging as building the solution itself</strong>. We use LeetCode problems as real examples to explore sophisticated test case generation algorithms that avoid "circular proof" while ensuring comprehensive coverage.</p>
     
-    <p>This repository demonstrates that <strong>generating comprehensive test cases for algorithmic problems can be as challenging as solving the problems themselves</strong>. While most developers focus on implementing solutions, creating robust test cases often requires deep algorithmic thinking and creative problem-solving.</p>
+    <p>Test case generation is difficult because common approaches lead to circular reasoning. For <a href="hascycle.html">example</a>, comparing the output of one cycle detection implementation against another requires trusting that the reference implementation is correct—but that's exactly what we're trying to verify.</p>
     
-    <h2>Project Overview</h2>
-    <p>This project systematically explores test case generation algorithms for LeetCode problems, starting with the first 200-300 problems. For each problem, we develop and implement algorithms that can generate random, comprehensive test cases without simply reimplementing the original solution (which would be a "circular proof").</p>
-    
-    <h2>Motivation</h2>
-    <p>The inspiration for this project comes from the complexity encountered when trying to generate test cases for seemingly simple problems. For example, generating test cases for a "detect cycle in directed graph" problem requires sophisticated graph construction techniques to ensure proper coverage of both cyclic and acyclic scenarios.</p>
-    
-    <p>As explored in detail in <a href="hascycle.html">this example</a>, effective test case generation often involves:</p>
-    
-    <ul>
-        <li><strong>Avoiding circular reasoning</strong>: Not reimplementing the solution to verify correctness</li>
-        <li><strong>Ensuring comprehensive coverage</strong>: Generating edge cases and boundary conditions</li>
-        <li><strong>Maintaining algorithmic soundness</strong>: Using mathematically valid approaches to construct test inputs</li>
-        <li><strong>Scaling complexity</strong>: Creating test cases of varying difficulty and size</li>
-    </ul>
-    
-    <h2>Repository Structure</h2>
-    <pre><code>leetcode-testgen/
-├── problems/           # Individual problem implementations
-│   ├── 001-two-sum/
-│   ├── 002-add-two-numbers/
-│   └── ...
-├── generators/         # Reusable test case generation utilities
-├── docs/              # Documentation and analysis
-└── examples/          # Example outputs and usage</code></pre>
-    
-    <h2>Example: Cycle Detection Test Case Generation</h2>
-    <p>One of the most illustrative examples is generating test cases for cycle detection in directed graphs. The challenge isn't just creating random graphs—it's systematically creating graphs where you can control and verify the presence or absence of cycles without reimplementing cycle detection.</p>
-    
-    <p>The solution involves:</p>
-    <ol>
-        <li>Strategic edge classification (red/blue arcs)</li>
-        <li>Reachability analysis for cycle formation</li>
-        <li>Controlled graph construction to ensure known outcomes</li>
-    </ol>
-    
+    <p>This challenge is known as the <strong>Oracle Problem</strong> in software testing—a well-established research area spanning several decades. Academic research has developed approaches like <a href="https://en.wikipedia.org/wiki/Metamorphic_testing" target="_blank">metamorphic testing</a> to establish correctness through mathematical properties rather than reference implementations.</p>
+
     <h2>Goals</h2>
+    This project is:
     <ul>
-        <li><strong>Educational</strong>: Demonstrate the complexity and importance of thorough test case design</li>
-        <li><strong>Practical</strong>: Provide reusable test case generators for common algorithmic patterns</li>
-        <li><strong>Analytical</strong>: Document the algorithmic thinking required for each problem's test generation</li>
-        <li><strong>Comprehensive</strong>: Cover a wide range of LeetCode problem types and difficulty levels</li>
+        <li>An educational demonstration: Real examples showing that test generation can be as complex as the original problem</li>
+        <li>A bridge between theory and practice: Concrete implementations of Oracle Problem solutions and metamorphic testing concepts</li>
+        <li>A case study collection: Detailed analysis of testing challenges for specific algorithmic problems</li>
+        <li>An algorithmic exercise: Treating test case generation as a first-class algorithmic challenge worthy of study</li>
     </ul>
+
+    <h2>Plan</h2>
+    <p>The plan is to cover the first 200-300 LeetCode problems, working on one problem at a time. Each problem implementation includes the test case generation algorithm, analysis of why naive approaches fail, and documentation of the underlying mathematical principles.</p>
     
-    <h2>Contributing</h2>
-    <p>Each problem implementation should include:</p>
-    <ul>
-        <li>The test case generation algorithm</li>
-        <li>Analysis of why naive approaches fail</li>
-        <li>Examples of generated test cases</li>
-        <li>Documentation of the underlying mathematical/algorithmic principles</li>
-    </ul>
-    
-    <h2>Getting Started</h2>
-    <pre><code>git clone https://github.com/zhengziying78/leetcode-testgen.git
-cd leetcode-testgen
-# Follow individual problem README files for specific instructions</code></pre>
-    
-    <h2>Philosophy</h2>
-    <p>This project operates on the principle that <strong>good testing requires as much algorithmic sophistication as good solving</strong>. By treating test case generation as a first-class algorithmic challenge, we can build better, more reliable software while deepening our understanding of the underlying problems.</p>
-    
-    <hr>
-    
-    <p style="text-align: center; font-style: italic; margin-top: 40px;">
-        "The best way to understand a problem deeply is to try to generate comprehensive test cases for it."
-    </p>
+    <h2>Index</h2>
+    <p>Click the links below to see each problem's description, solution, test case generator and thoughts regarding which is harder: testing the solution vs. building the solution.</p>
+    <table style="border: none;">
+        <tr><td><a href="problems/001-two-sum/index.html">1. Two Sum</a></td></tr>
+        <tr><td><a href="problems/002-add-two-numbers/index.html">2. Add Two Numbers</a></td></tr>
+        <tr><td><a href="problems/003-longest-substring-without-repeating-characters/index.html">3. Longest Substring Without Repeating Characters</a></td></tr>
+        <tr><td><a href="problems/004-median-of-two-sorted-arrays/index.html">4. Median of Two Sorted Arrays</a></td></tr>
+        <tr><td><a href="problems/005-longest-palindromic-substring/index.html">5. Longest Palindromic Substring</a></td></tr>
+        <tr><td><a href="problems/006-zigzag-conversion/index.html">6. Zigzag Conversion</a></td></tr>
+        <tr><td><a href="problems/007-reverse-integer/index.html">7. Reverse Integer</a></td></tr>
+        <tr><td><a href="problems/008-string-to-integer-atoi/index.html">8. String to Integer (atoi)</a></td></tr>
+        <tr><td><a href="problems/009-palindrome-number/index.html">9. Palindrome Number</a></td></tr>
+        <tr><td><a href="problems/010-regular-expression-matching/index.html">10. Regular Expression Matching</a></td></tr>
+        <tr><td><em>More problems coming soon...</em></td></tr>
+    </table>
     
     <div class="footer">
         <p>🤖 Generated with <a href="https://claude.ai/code" target="_blank">Claude Code</a></p>
