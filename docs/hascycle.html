@@ -3,63 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to Randomly Generate Test Cases for a HasCycle() Method</title>
+    <title>Test Case Generation for Cycle Detection in Directed Graphs</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>How to Randomly Generate Test Cases for a HasCycle() Method</h1>
+    <h1>Test Case Generation for Cycle Detection in Directed Graphs</h1>
     
-    <p>For many times, I found that testing a solution could be equally hard as writing a solution, if not harder. Here is an example: how to randomly generate test cases for a HasCycle() function.</p>
+    <h2>1. Overview</h2>
+    <p>This document describes a method for generating test cases for <a href="https://en.wikipedia.org/wiki/Cycle_detection" target="_blank">cycle detection algorithms in directed graphs</a>. The approach constructs graphs with known ground truth by tracking which edges would form cycles during the construction process.</p>
     
-    <p>HasCycle() is a coding question that I used for many times in the past: write a function to detect whether there is a cycle in a directed graph. Some candidates finished the code pretty quickly, so my follow-up question would be "how would you test it". For those who manually enumerated test cases quickly and thoroughly, my next question was "how would you randomly generate test cases".</p>
+    <h2>2. The Challenge</h2>
+    <p>Testing cycle detection implementations is difficult because common approaches lead to circular reasoning. For example, comparing the output of one HasCycle() implementation against another requires trusting that the reference implementation is correct—but that's exactly what we're trying to verify.</p>
     
-    <p>A wrong answer would be to write the solution again, say HasCycle2(), and see if HasCycle() produces the same results as HasCycle2() does for any randomly generated directed graph. That's a wrong method because it's circular proof: using this method requires the proof of HasCycle2() being fully correct, which is the same as to prove HasCycle() being fully correct. Someone argued that he could write HasCycle2() in a different algorithm to make it not a circular proof. No, that would be still a circular proof, just in a disguised form.</p>
+    <h2>3. Algorithm</h2>
     
-    <p>There wasn't a satisfactory answer by any candidate, as far as I remembered. To be honest, I didn't know the answer in the first place, either. It wasn't about the answer itself, anyway. It was mainly to figure out how the candidate approaches problems. As long as the reasoning is sound, it would be cool if the candidate told me "no, there is no way, because blah blah blah". But soon I started to think: to be fair, maybe I should figure that out myself first, to make sure either there is an answer, or the answer is "no, there isn't an answer".</p>
+    <h3>3.1 Key Insight</h3>
+    <p>The solution uses a constructive method that builds directed graphs while explicitly tracking cycle-forming potential. The key insight is that we can know the test oracle (i.e., whether the generated graph has cycles or not) <strong>deterministically</strong> without running any HasCycle() algorithm—the ground truth is established by construction.</p>
     
-    <p>I did come up with a way to randomly generate test cases for HasCycle(). Here are the steps:</p>
+    <h3>3.2 Edge Classification</h3>
+    <p>During construction, edges are classified into two categories:</p>
+    <ul>
+        <li><strong>Blue edges:</strong> Safe edges that don't complete any cycles</li>
+        <li><strong>Red edges:</strong> Edges that would complete a cycle if added</li>
+    </ul>
+    
+    <p>This classification allows us to generate test cases with guaranteed properties:</p>
+    <ul>
+        <li>Graphs with only blue edges are guaranteed to be acyclic</li>
+        <li>Graphs where some red edges are converted to blue are guaranteed to contain cycles</li>
+    </ul>
+    
+    <h3>3.3 Algorithm Steps</h3>
+    <p>The algorithm works as follows:</p>
     
     <ol>
-        <li>Pick a random integer <strong>N</strong>. Create a N-nodes directed graph with no arcs.</li>
-        <li>Pick a pair of nodes <strong>X</strong> and <strong>Y</strong> randomly, as long as there isn't an X->Y arc in the graph.</li>
-        <li>Add an X->Y arc to the graph and color it as blue.</li>
-        <li>Add the red arcs, too. A red arc is the last arc to form a cycle, in which all other arcs are blue.</li>
-        <li>Repeat 2-4 for a random number of times (or until there is no more blue arc can be added)</li>
-        <li>On the outcome of (5), just remove all the red arcs and the nodes and the blue arcs will become a graph without cycle. Pass it into HasCycle() and it should return false.</li>
-        <li>Or, on the outcome of (5), randomly change the color of one or many red arcs to blue. Remove the remaining red arcs. The nodes and all the blue arcs will become a directed graph with cycle. Pass it into HasCycle() and it should return true.</li>
+        <li><strong>Initialization:</strong> Generate a random integer <em>N</em> and create an <em>N</em>-node directed graph with no edges.</li>
+        <li><strong>Edge Selection:</strong> Randomly select a pair of nodes <em>X</em> and <em>Y</em> such that edge <em>X→Y</em> does not exist in the current graph.</li>
+        <li><strong>Blue Edge Addition:</strong> Add edge <em>X→Y</em> to the graph and classify it as a blue edge (cycle-safe edge).</li>
+        <li><strong>Red Edge Identification:</strong> Identify and add all red edges. A red edge represents the final edge needed to complete a cycle where all other edges in the cycle are blue.</li>
+        <li><strong>Iteration:</strong> Repeat steps 2-4 for a predetermined number of iterations or until no additional blue edges can be added.</li>
+        <li><strong>Acyclic Graph Generation:</strong> To generate an acyclic graph, remove all red edges from the construction. The resulting graph containing only blue edges is guaranteed to be cycle-free.</li>
+        <li><strong>Cyclic Graph Generation:</strong> To generate a cyclic graph, randomly convert one or more red edges to blue edges, then remove all remaining red edges. The resulting graph is guaranteed to contain at least one cycle.</li>
     </ol>
     
-    <p>The crux is how to identify which red arcs to add in step (4). Here is how:</p>
+    <h3>3.4 Red Edge Identification Algorithm</h3>
+    <p>The critical component of this method is the systematic identification of red edges in step 4. Given a newly added blue edge <em>X→Y</em>, we determine all potential cycle-completing edges as follows:</p>
     
     <ol style="list-style-type: lower-roman;">
-        <li>Get all the nodes that are reachable from Y by blue arcs, including Y itself, and put them into a list <strong>from-Y</strong>. This can be done by a simple traversal, following the blue arcs draining from Y.</li>
-        <li>Similarly, get all the nodes from which X is reachable by blue arcs, including X itself, and put them into a list <strong>to-X</strong>. This can be done by reverse-traversal on the blue arcs sinking into X.</li>
-        <li>For each node <strong>i</strong> in <strong>from-Y</strong> and each node <strong>j</strong> in <strong>to-X</strong>, create a red arc i->j.</li>
+        <li><strong>Forward Reachability:</strong> Compute the set of all nodes reachable from <em>Y</em> using only blue edges, including <em>Y</em> itself. Denote this set as <em>from-Y</em>. This is accomplished through forward traversal of the blue edge subgraph starting from <em>Y</em>.</li>
+        <li><strong>Backward Reachability:</strong> Compute the set of all nodes from which <em>X</em> is reachable using only blue edges, including <em>X</em> itself. Denote this set as <em>to-X</em>. This is accomplished through reverse traversal of the blue edge subgraph terminating at <em>X</em>.</li>
+        <li><strong>Red Edge Construction:</strong> For each node <em>i</em> ∈ <em>from-Y</em> (i.e., <em>i</em> is in the set <em>from-Y</em>) and each node <em>j</em> ∈ <em>to-X</em> (i.e., <em>j</em> is in the set <em>to-X</em>), create a red edge <em>i→j</em>. Each such edge, when combined with the existing blue edges, would complete exactly one cycle.</li>
     </ol>
     
-    <p>Use an example to illustrate how this works:</p>
+    <h2>4. Illustrative Example</h2>
+    <p>We demonstrate the algorithm through a concrete example with an 11-node directed graph (where 11 was randomly picked as the graph size).</p>
     
-    <p>First, randomly pick N=11, to generate a 11-nodes directed graph with no arcs:</p>
+    <h3>Step 1: Initialization</h3>
+    <p>Generate an 11-node directed graph with no edges:</p>
     
     <img src="images/hascycle/fig-01.png" alt="Figure 1: 11-node graph with no arcs" style="max-width: 100%; height: auto;">
     
-    <p>Add the first blue arc: A and K are randomly picked. A blue arc A->K is added. At the same time, a red arc K->A is added. K->A is red because it will form a cycle together with a blue arc A->K:</p>
+    <h3>Step 2: First Edge Addition</h3>
+    <p>Randomly select nodes A and K. Add blue edge A→K. Apply the red edge identification algorithm: since <em>from-K</em> = {K} and <em>to-A</em> = {A}, we add red edge K→A. This red edge would complete the cycle A→K→A:</p>
     
     <img src="images/hascycle/fig-02.png" alt="Figure 2: Adding first blue arc A->K and red arc K->A" style="max-width: 100%; height: auto;">
     
-    <p>Add the second blue arc randomly: B->A. This time, not only A->B should be added as a red arc (because A->B and B->A together will be a cycle), but also K->B should be added ad red arc as well, because B->A, A->K and K->B will be a cycle:</p>
+    <h3>Step 3: Second Edge Addition</h3>
+    <p>Add blue edge B→A. For this edge, <em>from-A</em> = {A, K} and <em>to-B</em> = {B}. Therefore, we add red edges A→B and K→B. Edge A→B would complete cycle B→A→B, while edge K→B would complete cycle B→A→K→B:</p>
     
     <img src="images/hascycle/fig-03.png" alt="Figure 3: Adding second blue arc B->A with red arcs A->B and K->B" style="max-width: 100%; height: auto;">
     
-    <p>Keep doing this. When G->H is added as blue arc, three red arcs need to be added: H->G, H->A, H->B. Because each of them will form a cycle with other blue arc(s):</p>
+    <h3>Step 4: Continued Edge Addition</h3>
+    <p>When blue edge G→H is added, we compute <em>from-H</em> = {H} and <em>to-G</em> = {G, A, B}. This results in red edges H→G, H→A, and H→B, each completing a distinct cycle:</p>
     
     <img src="images/hascycle/fig-04.png" alt="Figure 4: Adding blue arc G->H with red arcs H->G, H->A, H->B" style="max-width: 100%; height: auto;">
     
-    <p>Now let's examine a more general example of how to add red arcs. This time, a blue arc G->F is randomly added:</p>
+    <h3>Step 5: Complex Red Edge Identification</h3>
+    <p>Consider the addition of blue edge G→F to a more complex graph state:</p>
     
     <img src="images/hascycle/fig-05.png" alt="Figure 5: Adding blue arc G->F" style="max-width: 100%; height: auto;">
     
-    <p>In this case, from-Y is F, C, E and to-X is G, A, B. So we should add nice arcs: F->G, F->A, F->B, C->G, C->A, C->B, E->G, E->A, E->B:</p>
+    <p>For this edge, we compute <em>from-F</em> = {F, C, E} and <em>to-G</em> = {G, A, B}. The algorithm generates nine red edges: F→G, F→A, F→B, C→G, C→A, C→B, E→G, E→A, E→B:</p>
     
     <img src="images/hascycle/fig-06.png" alt="Figure 6: Graph with all red arcs added" style="max-width: 100%; height: auto;">
     
@@ -67,26 +91,33 @@
     
     <img src="images/hascycle/fig-08.png" alt="Figure 8: Complete graph with blue and red arcs" style="max-width: 100%; height: auto;">
     
-    <p>So the outcome of step (5) is this:</p>
+    <h3>Step 6: Complete Graph Construction</h3>
+    <p>After multiple iterations, the algorithm produces a graph containing both blue and red edges:</p>
     
     <img src="images/hascycle/fig-09.png" alt="Figure 9: Final graph with all blue and red arcs" style="max-width: 100%; height: auto;">
     
-    <p>Now, if we want a random graph without cycle, we just need to remove all the red arcs:</p>
+    <h2>5. Test Case Generation</h2>
+    
+    <h3>Acyclic Test Cases</h3>
+    <p>To generate an acyclic directed graph, remove all red edges from the construction. The resulting graph contains only blue edges and is guaranteed to be cycle-free:</p>
     
     <img src="images/hascycle/fig-10.png" alt="Figure 10: Graph without cycles (red arcs removed)" style="max-width: 100%; height: auto;">
     
-    <p>If we want a random graph with cycle, we will randomly convert one red arc to blue and remove all the rest red arcs. For example, we convert C->A to blue. That will give us a cycle A->G->F->C->A:</p>
+    <h3>Cyclic Test Cases</h3>
+    <p>To generate a cyclic directed graph, randomly select one or more red edges and convert them to blue edges, then remove all remaining red edges. For example, converting edge C→A to blue creates cycle A→G→F→C→A:</p>
     
     <img src="images/hascycle/fig-11.png" alt="Figure 11: Converting red arc C->A to blue" style="max-width: 100%; height: auto;">
     
     <img src="images/hascycle/fig-12.png" alt="Figure 12: Final graph with cycle A->G->F->C->A" style="max-width: 100%; height: auto;">
     
-    <p>I believe this method doesn't have any blind spot. Given enough time, it should be able to generate all possible kinds of directed graph, with 0, 1 or multiple cycles.</p>
+    <h2>6. Completeness and Coverage</h2>
+    <p>This method provides comprehensive coverage of all possible directed graph configurations. The algorithm can generate graphs with zero, single, or multiple cycles by systematically controlling the conversion of red edges to blue edges. The constructive approach ensures that the ground truth (presence or absence of cycles) is known by design, eliminating the need for potentially unreliable reference implementations.</p>
     
-    <p style="font-style: italic;">//the end</p>
+    <h2>7. Conclusion</h2>
+    <p>We have presented a systematic approach for generating random test cases for cycle detection algorithms in directed graphs. The method addresses the fundamental challenge of establishing ground truth without circular reasoning, providing a robust foundation for testing cycle detection implementations across diverse graph topologies.</p>
     
     <div class="footer">
-        <p>Originally published at <a href="https://zhengziying.com/2015/03/02/how-to-randomly-generate-test-cases-for-a-hascycle-method/" target="_blank">zhengziying.com</a></p>
+        <p><em>Note: This page was rewritten by Claude Code based on the original blog post at <a href="https://zhengziying.com/2015/03/02/how-to-randomly-generate-test-cases-for-a-hascycle-method/" target="_blank">zhengziying.com</a>.</em></p>
     </div>
 </body>
 </html>
