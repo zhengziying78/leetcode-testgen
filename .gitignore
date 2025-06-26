@@ -198,3 +198,7 @@ CLAUDE.md
 
 # macOS
 .DS_Store
+
+# Test generation output (ignore all files except samples)
+**/testgen_output/*
+!**/testgen_output/samples.yaml
