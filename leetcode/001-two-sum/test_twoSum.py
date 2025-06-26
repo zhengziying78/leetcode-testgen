@@ -1,15 +1,41 @@
 import pytest
+import json
+import yaml
+from pathlib import Path
 from solution_twoSum import Solution
 
 
-def test_twoSum_dummy():
-    """
-    Dummy test case for twoSum method.
-    Just invokes the method with dummy input without checking output.
-    """
-    solution = Solution()
-    nums = [2, 7, 11, 15]
-    target = 9
+def load_test_cases():
+    """Load all test case files (JSON and YAML) and combine them."""
+    testgen_output_dir = Path(__file__).parent / "testgen_output"
+    all_cases = []
     
-    # Call the method but don't assert anything
-    result = solution.twoSum(nums, target)
+    # Load YAML files
+    for yaml_file in testgen_output_dir.glob("*.yaml") or testgen_output_dir.glob("*.yml"):
+        with open(yaml_file, 'r') as f:
+            data = yaml.safe_load(f)
+            all_cases.extend(data["test_cases"])
+    
+    # Load JSON files
+    for json_file in testgen_output_dir.glob("*.json"):
+        with open(json_file, 'r') as f:
+            data = json.load(f)
+            all_cases.extend(data["test_cases"])
+    
+    return all_cases
+
+
+# Load test cases at module level
+TEST_CASES = load_test_cases()
+
+
+@pytest.mark.parametrize("test_case", TEST_CASES, ids=[tc["id"] for tc in TEST_CASES])
+def test_two_sum_data_driven(test_case):
+    """Data-driven test for Two Sum problem."""
+    solution = Solution()
+    result = solution.twoSum(test_case["input"]["nums"], test_case["input"]["target"])
+    
+    # Verify result matches expected (handle multiple valid solutions)
+    expected = test_case["expected"]
+    assert result == expected or sorted(result) == sorted(expected)
+    

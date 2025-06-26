@@ -1,0 +1,21 @@
+test_cases:
+  - id: basic_case_1
+    description: "Basic two sum with solution at indices 0,1"
+    input:
+      nums: [2, 7, 11, 15]
+      target: 9
+    expected: [0, 1]
+  
+  - id: basic_case_2
+    description: "Two sum with solution at end of array"
+    input:
+      nums: [3, 2, 4]
+      target: 6
+    expected: [1, 2]
+  
+  - id: edge_case_1
+    description: "Two sum with same number used twice"
+    input:
+      nums: [3, 3]
+      target: 6
+    expected: [0, 1]
