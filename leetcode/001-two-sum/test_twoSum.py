@@ -13,7 +13,7 @@ TEST_CASES = load_test_cases(__file__)
 
 
 @pytest.mark.parametrize("test_case", TEST_CASES, ids=[tc["id"] for tc in TEST_CASES])
-def test_two_sum_data_driven(test_case):
+def test_two_sum(test_case):
     """Data-driven test for Two Sum problem."""
     solution = Solution()
     result = solution.twoSum(test_case["input"]["nums"], test_case["input"]["target"])
