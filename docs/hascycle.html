@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Randomly Generate Test Cases for a HasCycle() Method</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>How to Randomly Generate Test Cases for a HasCycle() Method</h1>
+    
+    <p>For many times, I found that testing a solution could be equally hard as writing a solution, if not harder. Here is an example: how to randomly generate test cases for a HasCycle() function.</p>
+    
+    <p>HasCycle() is a coding question that I used for many times in the past: write a function to detect whether there is a cycle in a directed graph. Some candidates finished the code pretty quickly, so my follow-up question would be "how would you test it". For those who manually enumerated test cases quickly and thoroughly, my next question was "how would you randomly generate test cases".</p>
+    
+    <p>A wrong answer would be to write the solution again, say HasCycle2(), and see if HasCycle() produces the same results as HasCycle2() does for any randomly generated directed graph. That's a wrong method because it's circular proof: using this method requires the proof of HasCycle2() being fully correct, which is the same as to prove HasCycle() being fully correct. Someone argued that he could write HasCycle2() in a different algorithm to make it not a circular proof. No, that would be still a circular proof, just in a disguised form.</p>
+    
+    <p>There wasn't a satisfactory answer by any candidate, as far as I remembered. To be honest, I didn't know the answer in the first place, either. It wasn't about the answer itself, anyway. It was mainly to figure out how the candidate approaches problems. As long as the reasoning is sound, it would be cool if the candidate told me "no, there is no way, because blah blah blah". But soon I started to think: to be fair, maybe I should figure that out myself first, to make sure either there is an answer, or the answer is "no, there isn't an answer".</p>
+    
+    <p>I did come up with a way to randomly generate test cases for HasCycle(). Here are the steps:</p>
+    
+    <ol>
+        <li>Pick a random integer <strong>N</strong>. Create a N-nodes directed graph with no arcs.</li>
+        <li>Pick a pair of nodes <strong>X</strong> and <strong>Y</strong> randomly, as long as there isn't an X->Y arc in the graph.</li>
+        <li>Add an X->Y arc to the graph and color it as blue.</li>
+        <li>Add the red arcs, too. A red arc is the last arc to form a cycle, in which all other arcs are blue.</li>
+        <li>Repeat 2-4 for a random number of times (or until there is no more blue arc can be added)</li>
+        <li>On the outcome of (5), just remove all the red arcs and the nodes and the blue arcs will become a graph without cycle. Pass it into HasCycle() and it should return false.</li>
+        <li>Or, on the outcome of (5), randomly change the color of one or many red arcs to blue. Remove the remaining red arcs. The nodes and all the blue arcs will become a directed graph with cycle. Pass it into HasCycle() and it should return true.</li>
+    </ol>
+    
+    <p>The crux is how to identify which red arcs to add in step (4). Here is how:</p>
+    
+    <ol style="list-style-type: lower-roman;">
+        <li>Get all the nodes that are reachable from Y by blue arcs, including Y itself, and put them into a list <strong>from-Y</strong>. This can be done by a simple traversal, following the blue arcs draining from Y.</li>
+        <li>Similarly, get all the nodes from which X is reachable by blue arcs, including X itself, and put them into a list <strong>to-X</strong>. This can be done by reverse-traversal on the blue arcs sinking into X.</li>
+        <li>For each node <strong>i</strong> in <strong>from-Y</strong> and each node <strong>j</strong> in <strong>to-X</strong>, create a red arc i->j.</li>
+    </ol>
+    
+    <p>Use an example to illustrate how this works:</p>
+    
+    <p>First, randomly pick N=11, to generate a 11-nodes directed graph with no arcs:</p>
+    
+    <img src="images/hascycle/fig-01.png" alt="Figure 1: 11-node graph with no arcs" style="max-width: 100%; height: auto;">
+    
+    <p>Add the first blue arc: A and K are randomly picked. A blue arc A->K is added. At the same time, a red arc K->A is added. K->A is red because it will form a cycle together with a blue arc A->K:</p>
+    
+    <img src="images/hascycle/fig-02.png" alt="Figure 2: Adding first blue arc A->K and red arc K->A" style="max-width: 100%; height: auto;">
+    
+    <p>Add the second blue arc randomly: B->A. This time, not only A->B should be added as a red arc (because A->B and B->A together will be a cycle), but also K->B should be added ad red arc as well, because B->A, A->K and K->B will be a cycle:</p>
+    
+    <img src="images/hascycle/fig-03.png" alt="Figure 3: Adding second blue arc B->A with red arcs A->B and K->B" style="max-width: 100%; height: auto;">
+    
+    <p>Keep doing this. When G->H is added as blue arc, three red arcs need to be added: H->G, H->A, H->B. Because each of them will form a cycle with other blue arc(s):</p>
+    
+    <img src="images/hascycle/fig-04.png" alt="Figure 4: Adding blue arc G->H with red arcs H->G, H->A, H->B" style="max-width: 100%; height: auto;">
+    
+    <p>Now let's examine a more general example of how to add red arcs. This time, a blue arc G->F is randomly added:</p>
+    
+    <img src="images/hascycle/fig-05.png" alt="Figure 5: Adding blue arc G->F" style="max-width: 100%; height: auto;">
+    
+    <p>In this case, from-Y is F, C, E and to-X is G, A, B. So we should add nice arcs: F->G, F->A, F->B, C->G, C->A, C->B, E->G, E->A, E->B:</p>
+    
+    <img src="images/hascycle/fig-06.png" alt="Figure 6: Graph with all red arcs added" style="max-width: 100%; height: auto;">
+    
+    <img src="images/hascycle/fig-07.png" alt="Figure 7: Detailed view of red arcs" style="max-width: 100%; height: auto;">
+    
+    <img src="images/hascycle/fig-08.png" alt="Figure 8: Complete graph with blue and red arcs" style="max-width: 100%; height: auto;">
+    
+    <p>So the outcome of step (5) is this:</p>
+    
+    <img src="images/hascycle/fig-09.png" alt="Figure 9: Final graph with all blue and red arcs" style="max-width: 100%; height: auto;">
+    
+    <p>Now, if we want a random graph without cycle, we just need to remove all the red arcs:</p>
+    
+    <img src="images/hascycle/fig-10.png" alt="Figure 10: Graph without cycles (red arcs removed)" style="max-width: 100%; height: auto;">
+    
+    <p>If we want a random graph with cycle, we will randomly convert one red arc to blue and remove all the rest red arcs. For example, we convert C->A to blue. That will give us a cycle A->G->F->C->A:</p>
+    
+    <img src="images/hascycle/fig-11.png" alt="Figure 11: Converting red arc C->A to blue" style="max-width: 100%; height: auto;">
+    
+    <img src="images/hascycle/fig-12.png" alt="Figure 12: Final graph with cycle A->G->F->C->A" style="max-width: 100%; height: auto;">
+    
+    <p>I believe this method doesn't have any blind spot. Given enough time, it should be able to generate all possible kinds of directed graph, with 0, 1 or multiple cycles.</p>
+    
+    <p style="font-style: italic;">//the end</p>
+    
+    <div class="footer">
+        <p>Originally published at <a href="https://zhengziying.com/2015/03/02/how-to-randomly-generate-test-cases-for-a-hascycle-method/" target="_blank">zhengziying.com</a></p>
+    </div>
+</body>
+</html>
