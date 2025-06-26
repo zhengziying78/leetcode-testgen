@@ -1,3 +1,10 @@
+"""
+Two Sum solution implementation.
+
+Source: https://leetcode.com/problems/two-sum/solutions/6882535/try-this-code-and-beat-100-everyone/
+"""
+
+
 class Solution:
     def twoSum(self, nums, target):
         """

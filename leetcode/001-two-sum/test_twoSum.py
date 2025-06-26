@@ -1,5 +1,5 @@
 import pytest
-from twoSum import Solution
+from solution_twoSum import Solution
 
 
 def test_twoSum_dummy():
