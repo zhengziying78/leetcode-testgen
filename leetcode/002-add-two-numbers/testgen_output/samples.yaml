@@ -1,0 +1,21 @@
+test_cases:
+  - id: basic_case_1
+    description: "Add two single-digit numbers"
+    input:
+      l1: [2, 4, 3]  # represents 342
+      l2: [5, 6, 4]  # represents 465
+    expected: [7, 0, 8]  # represents 807
+  
+  - id: basic_case_2
+    description: "Add numbers with carry"
+    input:
+      l1: [9, 9, 9, 9, 9, 9, 9]  # represents 9999999
+      l2: [9, 9, 9, 9]  # represents 9999
+    expected: [8, 9, 9, 9, 0, 0, 0, 1]  # represents 10009998
+  
+  - id: edge_case_1
+    description: "Add zero to a number"
+    input:
+      l1: [0]  # represents 0
+      l2: [1, 2, 3]  # represents 321
+    expected: [1, 2, 3]  # represents 321
