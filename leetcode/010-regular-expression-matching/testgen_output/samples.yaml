@@ -1,0 +1,35 @@
+test_cases:
+  - id: basic_case_1
+    description: "Basic non-match"
+    input:
+      s: "aa"
+      p: "a"
+    expected: false
+  
+  - id: basic_case_2
+    description: "Star pattern matching"
+    input:
+      s: "aa"
+      p: "a*"
+    expected: true
+  
+  - id: basic_case_3
+    description: "Dot and star pattern"
+    input:
+      s: "ab"
+      p: ".*"
+    expected: true
+  
+  - id: edge_case_1
+    description: "Empty string with star pattern"
+    input:
+      s: ""
+      p: "a*"
+    expected: true
+  
+  - id: edge_case_2
+    description: "Complex pattern with multiple stars"
+    input:
+      s: "mississippi"
+      p: "mis*is*p*."
+    expected: false
