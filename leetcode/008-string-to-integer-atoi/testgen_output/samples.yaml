@@ -1,0 +1,30 @@
+test_cases:
+  - id: basic_case_1
+    description: "Basic positive number"
+    input:
+      s: "42"
+    expected: 42
+  
+  - id: basic_case_2
+    description: "Number with leading whitespace"
+    input:
+      s: "   -42"
+    expected: -42
+  
+  - id: basic_case_3
+    description: "Number with trailing characters"
+    input:
+      s: "4193 with words"
+    expected: 4193
+  
+  - id: edge_case_1
+    description: "Overflow positive"
+    input:
+      s: "91283472332"
+    expected: 2147483647
+  
+  - id: edge_case_2
+    description: "Overflow negative"
+    input:
+      s: "-91283472332"
+    expected: -2147483648
