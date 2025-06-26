@@ -1,0 +1,30 @@
+test_cases:
+  - id: basic_case_1
+    description: "String with repeating characters"
+    input:
+      s: "abcabcbb"
+    expected: 3  # "abc"
+  
+  - id: basic_case_2
+    description: "String with all same characters"
+    input:
+      s: "bbbbb"
+    expected: 1  # "b"
+  
+  - id: basic_case_3
+    description: "String with mixed characters"
+    input:
+      s: "pwwkew"
+    expected: 3  # "wke"
+  
+  - id: edge_case_1
+    description: "Empty string"
+    input:
+      s: ""
+    expected: 0
+  
+  - id: edge_case_2
+    description: "Single character"
+    input:
+      s: "a"
+    expected: 1
