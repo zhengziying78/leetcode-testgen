@@ -1,0 +1,30 @@
+test_cases:
+  - id: basic_case_1
+    description: "Positive palindrome"
+    input:
+      x: 121
+    expected: true
+  
+  - id: basic_case_2
+    description: "Negative number"
+    input:
+      x: -121
+    expected: false
+  
+  - id: basic_case_3
+    description: "Number ending in zero"
+    input:
+      x: 10
+    expected: false
+  
+  - id: edge_case_1
+    description: "Single digit"
+    input:
+      x: 7
+    expected: true
+  
+  - id: edge_case_2
+    description: "Even digit palindrome"
+    input:
+      x: 1221
+    expected: true
