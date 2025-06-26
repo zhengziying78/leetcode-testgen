@@ -1,0 +1,35 @@
+test_cases:
+  - id: basic_case_1
+    description: "Classic example with 3 rows"
+    input:
+      s: "PAYPALISHIRING"
+      numRows: 3
+    expected: "PAHNAPLSIIGYIR"
+  
+  - id: basic_case_2
+    description: "Example with 4 rows"
+    input:
+      s: "PAYPALISHIRING"
+      numRows: 4
+    expected: "PINALSIGYAHRPI"
+  
+  - id: edge_case_1
+    description: "Single row"
+    input:
+      s: "ABCDEFGH"
+      numRows: 1
+    expected: "ABCDEFGH"
+  
+  - id: edge_case_2
+    description: "Number of rows equals string length"
+    input:
+      s: "ABC"
+      numRows: 3
+    expected: "ABC"
+  
+  - id: edge_case_3
+    description: "Single character"
+    input:
+      s: "A"
+      numRows: 1
+    expected: "A"
