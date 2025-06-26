@@ -1,0 +1,30 @@
+test_cases:
+  - id: basic_case_1
+    description: "Basic palindrome substring"
+    input:
+      s: "babad"
+    expected: "bab"  # Could also be "aba"
+  
+  - id: basic_case_2
+    description: "Even length palindrome"
+    input:
+      s: "cbbd"
+    expected: "bb"
+  
+  - id: whole_palindrome
+    description: "Entire string is a palindrome"
+    input:
+      s: "racecar"
+    expected: "racecar"
+  
+  - id: single_char
+    description: "Single character string"
+    input:
+      s: "a"
+    expected: "a"
+  
+  - id: repeated_char
+    description: "String with repeated characters"
+    input:
+      s: "aaaa"
+    expected: "aaaa"
