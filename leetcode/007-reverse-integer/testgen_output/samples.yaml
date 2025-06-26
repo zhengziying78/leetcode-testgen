@@ -1,0 +1,30 @@
+test_cases:
+  - id: basic_case_1
+    description: "Positive number"
+    input:
+      x: 123
+    expected: 321
+  
+  - id: basic_case_2
+    description: "Negative number"
+    input:
+      x: -123
+    expected: -321
+  
+  - id: basic_case_3
+    description: "Number with trailing zeros"
+    input:
+      x: 120
+    expected: 21
+  
+  - id: edge_case_1
+    description: "Single digit"
+    input:
+      x: 5
+    expected: 5
+  
+  - id: edge_case_2
+    description: "Overflow case"
+    input:
+      x: 1534236469
+    expected: 0
