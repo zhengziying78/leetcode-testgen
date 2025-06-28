@@ -15,7 +15,77 @@
         <li><a href="https://leetcode.com/problems/two-sum/solutions/" target="_blank">Solutions</a></li>
     </ul>
     
-    <p><em>Coming soon...</em></p>
+    <h2>1. Overview</h2>
+    <p>This document describes a method for generating test cases for the <a href="https://leetcode.com/problems/two-sum/" target="_blank">Two Sum problem</a>. The approach constructs arrays with known ground truth by ensuring only one valid pair exists that sums to the target, avoiding circular reasoning in test validation.</p>
+    
+    <h2>2. Algorithm</h2>
+    
+    <p>The solution uses a constructive method that builds arrays while explicitly ensuring only one valid pair exists. This is achieved through a "forbidden number" approach:</p>
+    
+    <ol>
+        <li><strong>Golden Pair Selection:</strong> First, pick two "golden numbers" that sum to the target value.</li>
+        <li><strong>Forbidden List Management:</strong> As we add each "dull number" to fill the remaining positions, we immediately add its "pairing number" (target - dull_number) to a forbidden list.</li>
+        <li><strong>Uniqueness Guarantee:</strong> This ensures that no dull number can form a valid pair with any other number in the array, making the golden pair the only valid solution.</li>
+    </ol>
+    
+    <h2>3. Illustrative Example</h2>
+    <p>We demonstrate the algorithm through a concrete example.</p>
+    
+    <h3>Step 1: Target and Golden Pair Selection</h3>
+    <p>Suppose we choose:</p>
+    <ul>
+        <li><strong>Target:</strong> 9</li>
+        <li><strong>Golden pair:</strong> [2, 7] (since 2 + 7 = 9)</li>
+        <li><strong>Array length:</strong> 4 (so we need 2 dull numbers)</li>
+        <li><strong>Initialize forbidden list:</strong> forbidden = {2, 7} (the golden numbers)</li>
+    </ul>
+    
+    <h3>Step 2: Adding First Dull Number</h3>
+    <p>Now we need to pick a dull number other than <strong>2</strong> and <strong>7</strong>, which are already in the forbidden list. Let's pick <strong>11</strong>:</p>
+    <ul>
+        <li>Check: 11 is not in forbidden list {2, 7}, so 11 is valid to pick</li>
+        <li>Current array: [2, 7, 11]</li>
+        <li>Pairing number for 11: target - 11 = 9 - 11 = <strong>-2</strong></li>
+        <li>Add -2 to forbidden list: <strong>forbidden = {2, 7, -2}</strong></li>
+        <li>This ensures 11 cannot pair with any future number to sum to 9</li>
+    </ul>
+    
+    <h3>Step 3: Adding Second Dull Number</h3>
+    <p>Now we need to pick a dull number other than <strong>-2, 2, 7</strong>, which are in the forbidden list. Let's pick <strong>3</strong>:</p>
+    <ul>
+        <li>Check: 3 is not in forbidden list {2, 7, -2}, so 3 is valid to pick</li>
+        <li>Current array: [2, 7, 11, 3]</li>
+        <li>Pairing number for 3: target - 3 = 9 - 3 = <strong>6</strong></li>
+        <li>Add 6 to forbidden list: <strong>forbidden = {2, 7, -2, 6}</strong> (Note: this step is optional since we're done adding numbers, but maintains algorithmic consistency)</li>
+    </ul>
+    
+    <h3>Step 4: Result</h3>
+    <p>Final array: <strong>[2, 7, 11, 3]</strong></p>
+    <p>Let's verify all possible pairs:</p>
+    <ul>
+        <li>2 + 7 = 9 ✓ (our golden pair)</li>
+        <li>2 + 11 = 13 ≠ 9</li>
+        <li>2 + 3 = 5 ≠ 9</li>
+        <li>7 + 11 = 18 ≠ 9</li>
+        <li>7 + 3 = 10 ≠ 9</li>
+        <li>11 + 3 = 14 ≠ 9</li>
+    </ul>
+    <p><strong>Result:</strong> there is one and only one pair that sum to 9, confirming our construction worked correctly.</p>
+    
+    <h2>4. Completeness and Coverage</h2>
+    <p>On top of the core construction logic described above, we can add comprehensive coverage by systematically varying multiple dimensions:</p>
+    <ul>
+        <li><strong>Target values:</strong> Boundary cases, zero, positive/negative ranges</li>
+        <li><strong>Golden pairs:</strong> Close together, far apart, random combinations</li>
+        <li><strong>Array sizes:</strong> Minimum (2), maximum, and intermediate lengths</li>
+        <li><strong>Number distributions:</strong> Various ranges for dull numbers</li>
+        <li><strong>Array ordering:</strong> Sorted and unsorted arrangements</li>
+    </ul>
+
+    See <a href="https://github.com/zhengziying78/leetcode-testgen/blob/main/leetcode/001-two-sum/testgen_twoSum.py" target="_blank">leetcode/001-two-sum/testgen_twoSum.py</a> for full code.
+    
+    <h2>5. Conclusion</h2>
+    <p>We have presented a systematic approach for generating test cases for the Two Sum problem. The forbidden number technique ensures that exactly one valid pair exists in each test case, providing a robust foundation for testing Two Sum implementations without circular reasoning.</p>
     
     <div class="footer">
         <p><a href="../../index.html">← Back to Index</a></p>
