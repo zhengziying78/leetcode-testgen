@@ -201,4 +201,4 @@ CLAUDE.md
 
 # Test generation output (ignore all files except samples)
 **/testgen_output/*
-!**/testgen_output/samples.yaml
+!**/testgen_output/samples*.yaml
